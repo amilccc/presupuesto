@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <title>Mi Billetera Pro</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; -webkit-tap-highlight-color: transparent; padding-bottom: 120px; background-color: #F2F2F7; }
+        .ios-card { background: rgba(255, 255, 255, 0.9); backdrop-filter: blur(15px); border-radius: 22px; box-shadow: 0 4px 15px rgba(0,0,0,0.03); }
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: slideUp 0.2s ease-out; }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .active-tab-btn { color: #007AFF !important; }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        .circle-chart { width: 110px; height: 110px; transform: rotate(-90deg); }
+        .circle-bg { fill: none; stroke: #334155; stroke-width: 2.5; }
+        .circle { fill: none; stroke-width: 2.5; stroke-linecap: round; transition: stroke-dasharray 0.8s ease-out; }
+    </style>
+</head>
+<body>
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-200 p-4">
+        <div class="max-w-lg mx-auto flex justify-between items-center">
+            <select id="global-month" onchange="changeMonth()" class="text-2xl font-black bg-transparent outline-none text-slate-800 appearance-none">
+                <option value="Enero">Enero</option><option value="Febrero">Febrero</option>
+                <option value="Marzo">Marzo</option><option value="Abril">Abril</option>
+                <option value="Mayo">Mayo</option><option value="Junio">Junio</option>
+                <option value="Julio">Julio</option><option value="Agosto">Agosto</option>
+                <option value="Septiembre">Septiembre</option><option value="Octubre">Octubre</option>
+                <option value="Noviembre">Noviembre</option><option value="Diciembre">Diciembre</option>
+            </select>
+            <button id="btn-save-top" onclick="saveCurrentMonth()" class="bg-[#007AFF] text-white px-6 py-2 rounded-full font-bold text-sm shadow-md active:scale-95 transition-all">Guardar</button>
+        </div>
+    </header>
+
+    <main class="p-5 max-w-lg mx-auto">
+        <div id="dashboard" class="tab-content active space-y-5">
+            <h2 class="text-xl font-black text-slate-800 ml-1">Resumen del Mes</h2>
+            <div class="ios-card p-6 flex items-center justify-between bg-slate-800 text-white shadow-xl">
+                <div>
+                    <p class="text-[10px] text-slate-400 font-bold uppercase mb-1">Ingresos</p>
+                    <p id="dash-total-budget" class="text-3xl font-black">Q0.00</p>
+                    <div class="flex gap-4 mt-4">
+                        <div><p class="text-[8px] text-slate-500 uppercase">Gastos</p><p id="dash-spent" class="font-bold text-red-400">Q0.00</p></div>
+                        <div><p class="text-[8px] text-slate-500 uppercase">Disponible</p><p id="dash-avail" class="font-bold text-emerald-400">Q0.00</p></div>
+                    </div>
+                </div>
+                <div class="relative flex items-center justify-center">
+                    <svg class="circle-chart" viewBox="0 0 36 36">
+                        <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
+                        <path id="dash-circle" class="circle" stroke="#007AFF" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
+                    </svg>
+                    <div class="absolute text-[10px] font-bold text-slate-300"><span id="dash-percent">0</span>%</div>
+                </div>
+            </div>
+            <div class="ios-card p-5">
+                <p class="text-[10px] font-bold text-slate-400 uppercase mb-3">Mayores Gastos</p>
+                <div id="dash-top-expenses" class="space-y-3 text-slate-400 text-xs italic text-center py-4">Sin datos registrados aún.</div>
+            </div>
+        </div>
+
+        <div id="esperado" class="tab-content space-y-6">
+            <div class="space-y-3">
+                <h3 class="text-xs font-black text-slate-400 uppercase ml-1">Presupuesto Ideal</h3>
+                <div class="ios-card p-4 bg-indigo-50 border border-indigo-100 flex justify-between items-center">
+                    <div><p class="text-[10px] font-black text-indigo-400 uppercase">Ingreso Esperado Q1</p><div class="flex items-center font-black text-indigo-600 text-xl"><span>Q</span><input type="number" id="p-inc-q1" value="0" oninput="calculateReal()" class="bg-transparent outline-none w-24"></div></div>
+                </div>
+                <div id="list-plan-q1" class="space-y-2"></div>
+                <button onclick="addExtraPlan('list-plan-q1')" class="w-full py-3 bg-white rounded-xl border-2 border-dashed border-indigo-200 text-indigo-400 font-bold text-[10px] uppercase">+ Añadir Gasto Fijo Q1</button>
+            </div>
+            <div class="space-y-3">
+                <div class="ios-card p-4 bg-emerald-50 border border-emerald-100 flex justify-between items-center">
+                    <div><p class="text-[10px] font-black text-emerald-500 uppercase">Ingreso Esperado Q2</p><div class="flex items-center font-black text-emerald-600 text-xl"><span>Q</span><input type="number" id="p-inc-q2" value="0" oninput="calculateReal()" class="bg-transparent outline-none w-24"></div></div>
+                </div>
+                <div id="list-plan-q2" class="space-y-2"></div>
+                <button onclick="addExtraPlan('list-plan-q2')" class="w-full py-3 bg-white rounded-xl border-2 border-dashed border-emerald-200 text-emerald-400 font-bold text-[10px] uppercase">+ Añadir Gasto Fijo Q2</button>
+            </div>
+        </div>
+
+        <div id="real" class="tab-content space-y-6">
+            <div class="space-y-3">
+                <h3 class="text-xs font-black text-slate-400 uppercase ml-1">Ejecución Real Q1</h3>
+                <div class="ios-card p-4 bg-indigo-600 text-white shadow-lg flex justify-between items-center">
+                    <div class="text-left"><p class="text-[9px] font-bold uppercase opacity-70">Ingreso Recibido</p><input type="number" id="inc-q1" value="0" oninput="calculateReal()" class="bg-transparent text-xl font-black outline-none w-full"></div>
+                    <div class="text-right"><p class="text-[9px] font-bold uppercase opacity-70">Saldo Q1</p><p id="rest-q1" class="text-xl font-black text-indigo-100">Q0.00</p></div>
+                </div>
+                <div id="rows-q1" class="space-y-2"></div>
+                <button onclick="addExtraReal('q1')" class="w-full py-3 bg-indigo-50 rounded-xl border-2 border-dashed border-indigo-200 text-indigo-400 font-bold text-[10px] uppercase">+ Gasto Extra Real Q1</button>
+            </div>
+            <div class="space-y-3">
+                <h3 class="text-xs font-black text-slate-400 uppercase ml-1">Ejecución Real Q2</h3>
+                <div class="ios-card p-4 bg-emerald-600 text-white shadow-lg flex justify-between items-center">
+                    <div class="text-left"><p class="text-[9px] font-bold uppercase opacity-70">Ingreso Recibido</p><input type="number" id="inc-q2" value="0" oninput="calculateReal()" class="bg-transparent text-xl font-black outline-none w-full"></div>
+                    <div class="text-right"><p class="text-[9px] font-bold uppercase opacity-70">Saldo Q2</p><p id="rest-q2" class="text-xl font-black text-emerald-100">Q0.00</p></div>
+                </div>
+                <div id="rows-q2" class="space-y-2"></div>
+                <button onclick="addExtraReal('q2')" class="w-full py-3 bg-emerald-50 rounded-xl border-2 border-dashed border-emerald-200 text-emerald-400 font-bold text-[10px] uppercase">+ Gasto Extra Real Q2</button>
+            </div>
+        </div>
+
+        <div id="ahorro" class="tab-content space-y-4">
+            <h2 class="text-xl font-black text-slate-800 ml-1">Tu Ahorro</h2>
+            <div class="ios-card p-6 border-l-8 border-emerald-500 shadow-xl">
+                <p class="text-[10px] font-bold text-slate-400 uppercase">Capital Final Disponible</p>
+                <p id="save-final-tab" class="text-4xl font-black text-emerald-500 py-2">Q0.00</p>
+                <p id="status-txt" class="text-[10px] font-black text-slate-400 mt-3 uppercase">Listo para empezar</p>
+            </div>
+            <button onclick="if(confirm('¿Borrar todos los datos del celular?')) { localStorage.clear(); location.reload(); }" class="w-full py-3 text-red-400 font-bold text-[10px] uppercase mt-10">Borrar todos los datos</button>
+        </div>
+    </main>
+
+    <nav class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-xl border-t border-slate-200 flex justify-around p-3 pb-8 z-50">
+        <button onclick="openTab(event, 'dashboard')" class="tab-btn active-tab-btn flex flex-col items-center gap-1 flex-1 text-slate-300"><i class="fas fa-chart-pie text-lg"></i><span class="text-[8px] font-bold uppercase">Inicio</span></button>
+        <button onclick="openTab(event, 'esperado')" class="tab-btn flex flex-col items-center gap-1 flex-1 text-slate-300"><i class="fas fa-list-check text-lg"></i><span class="text-[8px] font-bold uppercase">Planes</span></button>
+        <button onclick="openTab(event, 'real')" class="tab-btn flex flex-col items-center gap-1 flex-1 text-slate-300"><i class="fas fa-wallet text-lg"></i><span class="text-[8px] font-bold uppercase">Gasto</span></button>
+        <button onclick="openTab(event, 'ahorro')" class="tab-btn flex flex-col items-center gap-1 flex-1 text-slate-300"><i class="fas fa-piggy-bank text-lg"></i><span class="text-[8px] font-bold uppercase">Metas</span></button>
+    </nav>
+
+    <script>
+        let itemsQ1 = JSON.parse(localStorage.getItem('conf_q1')) || [];
+        let itemsQ2 = JSON.parse(localStorage.getItem('conf_q2')) || [];
+        let realValues = {}; 
+        let paidItems = {}; 
+        let hiddenRealItems = {};
+
+        function f(num) { return 'Q' + (parseFloat(num) || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+
+        function renderRows() {
+            const renderPlan = (items, container) => {
+                document.getElementById(container).innerHTML = items.map((item, i) => `
+                    <div class="ios-card p-3 flex justify-between items-center bg-white/50">
+                        <span class="text-xs font-bold text-slate-700">${item.n}</span>
+                        <div class="flex items-center gap-2">
+                             <input type="number" value="${item.v}" oninput="updatePlanValue('${container}', ${i}, this.value)" class="w-20 text-right font-black text-slate-800 text-xs bg-slate-100 rounded-lg p-1 outline-none">
+                             <button onclick="deletePlanItem('${container}', ${i})" class="text-red-300 p-1"><i class="fas fa-trash-can"></i></button>
+                        </div>
+                    </div>`).join('');
+            };
+            renderPlan(itemsQ1, 'list-plan-q1');
+            renderPlan(itemsQ2, 'list-plan-q2');
+            renderRealRows();
+        }
+
+        function renderRealRows() {
+            const currentMonth = document.getElementById('global-month').value;
+            const extras = JSON.parse(localStorage.getItem(`extras_${currentMonth}`)) || { q1: [], q2: [] };
+            const hidden = hiddenRealItems[currentMonth] || [];
+
+            const renderList = (planItems, extraItems, containerId, prefix) => {
+                let html = "";
+                planItems.forEach((item, idx) => {
+                    const key = `${prefix}_plan_${idx}`;
+                    if (!hidden.includes(key)) html += createInputRow(item.n, item.v, key, prefix, false);
+                });
+                extraItems.forEach((item, idx) => {
+                    const key = `${prefix}_extra_${idx}`;
+                    html += createInputRow(item.n, 0, key, prefix, true, idx);
+                });
+                document.getElementById(containerId).innerHTML = html || '<p class="text-center text-slate-300 text-[10px] py-2 uppercase">Sin registros</p>';
+            };
+            renderList(itemsQ1, extras.q1, 'rows-q1', 'q1');
+            renderList(itemsQ2, extras.q2, 'rows-q2', 'q2');
+            calculateReal();
+        }
+
+        function createInputRow(name, planVal, key, prefix, isExtra, extraIdx) {
+            const savedVal = realValues[key] || "";
+            const isPaid = paidItems[key];
+            return `<div class="r-row ios-card p-4 flex items-center justify-between mb-2" data-key="${key}" data-plan="${planVal}" data-name="${name}">
+                <div class="flex items-center gap-3">
+                    <button onclick="deleteRealRow('${key}', ${isExtra}, ${extraIdx}, '${prefix}')" class="text-red-300"><i class="fas fa-trash-can text-xs"></i></button>
+                    <div><p class="text-sm font-bold text-slate-800">${name}</p><p class="text-[9px] text-slate-400 uppercase">${isExtra ? 'Variable' : 'Plan: ' + f(planVal)}</p></div>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="togglePaid('${key}')"><i class="fas ${isPaid ? 'fa-check-circle text-emerald-500' : 'fa-circle text-slate-200'} text-2xl"></i></button>
+                    <input type="number" value="${savedVal}" class="val-input w-24 text-right font-black ${prefix=='q1'?'text-indigo-600':'text-emerald-600'} outline-none bg-transparent" oninput="saveRealValue('${key}', this.value)" placeholder="0.00">
+                </div>
+            </div>`;
+        }
+
+        function calculateReal() {
+            const rI1 = parseFloat(document.getElementById('inc-q1').value) || 0;
+            const rI2 = parseFloat(document.getElementById('inc-q2').value) || 0;
+            let pg1 = 0, pg2 = 0;
+            let allEx = [];
+
+            document.querySelectorAll('.r-row').forEach(row => {
+                const inp = row.querySelector('.val-input');
+                const key = row.dataset.key;
+                if (inp.value !== "") {
+                    const val = parseFloat(inp.value);
+                    if (key.startsWith('q1')) pg1 += val; else pg2 += val;
+                    allEx.push({ n: row.dataset.name, v: val });
+                }
+            });
+
+            document.getElementById('rest-q1').innerText = f(rI1 - pg1);
+            document.getElementById('rest-q2').innerText = f(rI2 - pg2);
+            const totalIn = rI1 + rI2;
+            const totalOut = pg1 + pg2;
+            const final = totalIn - totalOut;
+
+            document.getElementById('dash-total-budget').innerText = f(totalIn);
+            document.getElementById('dash-spent').innerText = f(totalOut);
+            document.getElementById('dash-avail').innerText = f(final);
+            document.getElementById('save-final-tab').innerText = f(final);
+
+            const pct = totalIn > 0 ? Math.min((totalOut / totalIn) * 100, 100) : 0;
+            document.getElementById('dash-percent').innerText = Math.round(pct);
+            document.getElementById('dash-circle').style.strokeDasharray = `${pct}, 100`;
+
+            allEx.sort((a,b) => b.v - a.v);
+            document.getElementById('dash-top-expenses').innerHTML = allEx.slice(0, 5).map(i => `<div class="flex justify-between text-xs border-b border-slate-50 pb-2"><b>${i.n}</b><span>${f(i.v)}</span></div>`).join('') || "Sin gastos registrados.";
+            return { inc: totalIn, exp: totalOut };
+        }
+
+        function addExtraPlan(container) {
+            const n = prompt("Descripción (ej: Alquiler):"); if(!n) return;
+            const v = parseFloat(prompt("Monto habitual:")) || 0;
+            if(container === 'list-plan-q1') itemsQ1.push({n, v}); else itemsQ2.push({n, v});
+            localStorage.setItem('conf_q1', JSON.stringify(itemsQ1));
+            localStorage.setItem('conf_q2', JSON.stringify(itemsQ2));
+            renderRows();
+        }
+
+        function addExtraReal(prefix) {
+            const n = prompt("Gasto nuevo:"); if(!n) return;
+            const m = document.getElementById('global-month').value;
+            let ex = JSON.parse(localStorage.getItem(`extras_${m}`)) || { q1: [], q2: [] };
+            ex[prefix].push({ n: n });
+            localStorage.setItem(`extras_${m}`, JSON.stringify(ex));
+            renderRealRows();
+        }
+
+        function saveCurrentMonth() {
+            const m = document.getElementById('global-month').value;
+            const state = {
+                m, pI1: document.getElementById('p-inc-q1').value, pI2: document.getElementById('p-inc-q2').value,
+                inc1: document.getElementById('inc-q1').value, inc2: document.getElementById('inc-q2').value,
+                v_map: realValues, paid: paidItems
+            };
+            localStorage.setItem('f_v_cloud_' + m, JSON.stringify(state));
+            const b = document.getElementById('btn-save-top');
+            b.innerText = "¡Hecho!"; setTimeout(() => b.innerText = "Guardar", 1000);
+        }
+
+        function changeMonth() {
+            const m = document.getElementById('global-month').value;
+            const d = JSON.parse(localStorage.getItem('f_v_cloud_' + m));
+            if(d) {
+                document.getElementById('p-inc-q1').value = d.pI1; document.getElementById('p-inc-q2').value = d.pI2;
+                document.getElementById('inc-q1').value = d.inc1; document.getElementById('inc-q2').value = d.inc2;
+                realValues = d.v_map || {}; paidItems = d.paid || {};
+            } else {
+                document.getElementById('p-inc-q1').value = 0; document.getElementById('p-inc-q2').value = 0;
+                document.getElementById('inc-q1').value = 0; document.getElementById('inc-q2').value = 0;
+                realValues = {}; paidItems = {};
+            }
+            renderRealRows();
+        }
+
+        function openTab(evt, name) {
+            document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
+            document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active-tab-btn"));
+            document.getElementById(name).classList.add("active");
+            evt.currentTarget.classList.add("active-tab-btn");
+        }
+
+        function deletePlanItem(cont, i) {
+            if(!confirm("¿Borrar este gasto fijo?")) return;
+            if(cont === 'list-plan-q1') itemsQ1.splice(i, 1); else itemsQ2.splice(i, 1);
+            localStorage.setItem('conf_q1', JSON.stringify(itemsQ1)); localStorage.setItem('conf_q2', JSON.stringify(itemsQ2));
+            renderRows();
+        }
+
+        function deleteRealRow(key, isExtra, idx, prefix) {
+            const m = document.getElementById('global-month').value;
+            if (isExtra) {
+                let ex = JSON.parse(localStorage.getItem(`extras_${m}`));
+                ex[prefix].splice(idx, 1);
+                localStorage.setItem(`extras_${m}`, JSON.stringify(ex));
+            } else {
+                if(!hiddenRealItems[m]) hiddenRealItems[m] = [];
+                hiddenRealItems[m].push(key);
+            }
+            renderRealRows();
+        }
+
+        function updatePlanValue(cont, i, v) { if(cont === 'list-plan-q1') itemsQ1[i].v = parseFloat(v)||0; else itemsQ2[i].v = parseFloat(v)||0; }
+        function saveRealValue(k, v) { realValues[k] = v; calculateReal(); }
+        function togglePaid(k) { paidItems[k] = !paidItems[k]; renderRealRows(); }
+
+        renderRows();
+    </script>
+</body>
+</html>
