@@ -17,19 +17,19 @@
         .circle-chart { width: 120px; height: 120px; transform: rotate(-90deg); }
         .circle-bg { fill: none; stroke: #334155; stroke-width: 2.5; }
         .circle { fill: none; stroke-width: 2.5; stroke-linecap: round; transition: stroke-dasharray 1s ease-out; }
-        /* Clases para ocultar/mostrar separadores */
         .mode-mensual .section-separator { display: none; }
         .mode-mensual .q2-label-hide { display: none; }
     </style>
 </head>
-<body class="mode-mensual"> <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-200 p-4">
+<body class="mode-mensual">
+
+    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 border-b border-slate-200 p-4">
         <div class="max-w-lg mx-auto flex justify-between items-center">
             <div class="flex items-center gap-3">
                 <select id="pay-frequency" onchange="changeFrequency()" class="bg-indigo-50 text-indigo-600 font-bold text-[10px] p-2 rounded-xl outline-none border-none appearance-none cursor-pointer uppercase tracking-wider">
                     <option value="mensual">Mensual</option>
                     <option value="quincenal">Quincenal</option>
                 </select>
-                
                 <select id="global-month" onchange="changeMonth()" class="text-2xl font-black bg-transparent outline-none text-slate-800 appearance-none">
                     <option value="Enero">Enero</option><option value="Febrero">Febrero</option>
                     <option value="Marzo">Marzo</option><option value="Abril">Abril</option>
@@ -72,15 +72,15 @@
         <div id="esperado" class="tab-content space-y-6">
             <div class="space-y-3">
                 <div class="ios-card p-4 bg-indigo-50 border border-indigo-100 flex justify-between items-center">
-                    <div><p class="text-[10px] font-black text-indigo-400 uppercase lbl-q1">Ingreso Q1</p><div class="flex items-center font-black text-indigo-600 text-xl"><span>Q</span><input type="number" inputmode="decimal" id="p-inc-q1" value="0.00" oninput="calculateReal()" class="bg-transparent outline-none w-24"></div></div>
+                    <div><p class="text-[10px] font-black text-indigo-400 uppercase lbl-q1">Ingresos</p><div class="flex items-center font-black text-indigo-600 text-xl"><span>Q</span><input type="number" inputmode="decimal" id="p-inc-q1" value="0.00" oninput="calculateReal()" class="bg-transparent outline-none w-24"></div></div>
                 </div>
                 <div id="list-plan-q1" class="space-y-2"></div>
-                <button onclick="addExtraPlan('list-plan-q1')" class="w-full py-2 bg-white rounded-xl border-2 border-dashed border-indigo-200 text-indigo-400 font-bold text-[10px] uppercase">+ Gasto Plan A</button>
+                <button onclick="addExtraPlan('list-plan-q1')" class="w-full py-2 bg-white rounded-xl border-2 border-dashed border-indigo-200 text-indigo-400 font-bold text-[10px] uppercase">+ Gasto Plan</button>
             </div>
             <hr class="section-separator border-slate-200">
             <div class="space-y-3">
                 <div class="ios-card p-4 bg-emerald-50 border border-emerald-100 flex justify-between items-center q2-label-hide">
-                    <div><p class="text-[10px] font-black text-emerald-500 uppercase lbl-q2">Ingreso Q2</p><div class="flex items-center font-black text-emerald-600 text-xl"><span>Q</span><input type="number" inputmode="decimal" id="p-inc-q2" value="0.00" oninput="calculateReal()" class="bg-transparent outline-none w-24"></div></div>
+                    <div><p class="text-[10px] font-black text-emerald-500 uppercase lbl-q2">Ingresos Q2</p><div class="flex items-center font-black text-emerald-600 text-xl"><span>Q</span><input type="number" inputmode="decimal" id="p-inc-q2" value="0.00" oninput="calculateReal()" class="bg-transparent outline-none w-24"></div></div>
                 </div>
                 <div id="list-plan-q2" class="space-y-2"></div>
                 <button onclick="addExtraPlan('list-plan-q2')" class="w-full py-2 bg-white rounded-xl border-2 border-dashed border-emerald-200 text-emerald-400 font-bold text-[10px] uppercase">+ Gasto Plan B</button>
@@ -94,9 +94,9 @@
                     <div><p class="text-[9px] font-bold uppercase opacity-70">Por Pagar</p><p id="pending-q1" class="text-lg font-black text-indigo-300">Q0.00</p></div>
                     <div class="text-right"><p class="text-[9px] font-bold uppercase opacity-70">Restante</p><p id="rest-q1" class="text-xl font-black text-indigo-100">Q0.00</p></div>
                 </div>
-                <div class="ios-card p-4"><span class="text-[10px] font-bold text-slate-400 uppercase lbl-q1">Ingreso Real Q1</span><input type="number" inputmode="decimal" id="inc-q1" value="0.00" oninput="calculateReal()" class="w-full text-lg font-bold text-indigo-600 outline-none bg-transparent"></div>
+                <div class="ios-card p-4"><span class="text-[10px] font-bold text-slate-400 uppercase lbl-q1">Ingreso Real</span><input type="number" inputmode="decimal" id="inc-q1" value="0.00" oninput="calculateReal()" class="w-full text-lg font-bold text-indigo-600 outline-none bg-transparent"></div>
                 <div id="rows-q1" class="space-y-2"></div>
-                <button onclick="addExtraReal('q1')" class="w-full py-2 bg-indigo-50 rounded-xl border-2 border-dashed border-indigo-200 text-indigo-400 font-bold text-[10px] uppercase">+ Gasto Real A</button>
+                <button onclick="addExtraReal('q1')" class="w-full py-2 bg-indigo-50 rounded-xl border-2 border-dashed border-indigo-200 text-indigo-400 font-bold text-[10px] uppercase">+ Gasto Real</button>
             </div>
             <hr class="section-separator border-slate-200">
             <div class="space-y-3">
@@ -112,11 +112,10 @@
         </div>
 
         <div id="ahorro" class="tab-content space-y-4">
-            <h2 class="text-xl font-black text-slate-800 ml-1">Estado de Ahorro</h2>
             <div class="ios-card p-5 border-l-8 border-emerald-500 shadow-xl">
-                <p class="text-[10px] font-bold text-slate-400 uppercase">Disponible Real Acumulado</p>
+                <p class="text-[10px] font-bold text-slate-400 uppercase">Ahorro Real Acumulado</p>
                 <p id="save-final-tab" class="text-4xl font-black text-emerald-500 py-2">Q0.00</p>
-                <p id="status-txt" class="text-[10px] font-black text-slate-400 mt-3 uppercase">Calculando...</p>
+                <p id="status-txt" class="text-[10px] font-black text-slate-400 mt-3 uppercase">Actualizado</p>
             </div>
         </div>
 
@@ -137,23 +136,14 @@
     <script>
         let itemsQ1 = JSON.parse(localStorage.getItem('conf_q1')) || [{n:"Ejemplo Gasto",v:0}];
         let itemsQ2 = JSON.parse(localStorage.getItem('conf_q2')) || [];
-        let realValues = {}; 
-        let hiddenRealItems = {}; 
-        let paidItems = {}; 
+        let realValues = {}; let hiddenRealItems = {}; let paidItems = {}; 
 
-        function f(num) { return 'Q' + (num || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
+        function f(n) { return 'Q' + (n || 0).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }); }
 
         function changeFrequency() {
             const freq = document.getElementById('pay-frequency').value;
             localStorage.setItem('f_pref_freq', freq);
-            
-            // Cambiamos la clase del body para efectos visuales (CSS)
-            if(freq === 'mensual') {
-                document.body.classList.add('mode-mensual');
-            } else {
-                document.body.classList.remove('mode-mensual');
-            }
-            
+            document.body.classList.toggle('mode-mensual', freq === 'mensual');
             updateLabels(freq);
             calculateReal();
         }
@@ -162,188 +152,135 @@
             const isQ = freq === 'quincenal';
             document.querySelectorAll('.lbl-q1').forEach(el => el.innerText = isQ ? '1ra Quincena' : 'Ingresos Totales');
             document.querySelectorAll('.lbl-q2').forEach(el => el.innerText = isQ ? '2da Quincena' : 'Otros Ingresos');
-            document.querySelector('.text-label-freq').innerText = isQ ? 'Presupuesto Quincenal' : 'Presupuesto Mensual';
         }
 
         function renderRows() {
-            const renderPlan = (items, container) => {
-                document.getElementById(container).innerHTML = items.map((item, i) => `
+            const r = (items, c) => {
+                document.getElementById(c).innerHTML = items.map((item, i) => `
                     <div class="ios-card p-3 flex justify-between items-center bg-white/50">
                         <span class="text-xs font-bold text-slate-700">${item.n}</span>
                         <div class="flex items-center gap-2">
-                             <input type="number" inputmode="decimal" value="${item.v.toFixed(2)}" oninput="updatePlanValue('${container}', ${i}, this.value)" class="w-20 text-right font-black text-slate-800 text-xs bg-slate-100 rounded-lg p-1 outline-none">
-                             <button onclick="deletePlanItem('${container}', ${i})" class="text-red-300 p-1"><i class="fas fa-trash-can"></i></button>
+                             <input type="number" inputmode="decimal" value="${item.v.toFixed(2)}" oninput="updatePlanValue('${c}', ${i}, this.value)" class="w-20 text-right font-black text-slate-800 text-xs bg-slate-100 rounded-lg p-1 outline-none">
+                             <button onclick="deletePlanItem('${c}', ${i})" class="text-red-300 p-1"><i class="fas fa-trash-can"></i></button>
                         </div>
                     </div>`).join('');
             };
-            renderPlan(itemsQ1, 'list-plan-q1');
-            renderPlan(itemsQ2, 'list-plan-q2');
+            r(itemsQ1, 'list-plan-q1'); r(itemsQ2, 'list-plan-q2');
             renderRealRows();
         }
 
         function renderRealRows() {
             const m = document.getElementById('global-month').value;
-            const extras = JSON.parse(localStorage.getItem(`extras_${m}`)) || { q1: [], q2: [] };
-            const hidden = hiddenRealItems[m] || [];
-            const renderList = (planItems, extraItems, containerId, prefix) => {
-                let html = "";
-                planItems.forEach((item, idx) => {
-                    const key = `${prefix}_plan_${idx}`;
-                    if (!hidden.includes(key)) html += createInputRow(item.n, item.v, key, prefix, false);
+            const ex = JSON.parse(localStorage.getItem(`extras_${m}`)) || { q1: [], q2: [] };
+            const hid = hiddenRealItems[m] || [];
+            const rL = (pI, eI, cI, pref) => {
+                let h = "";
+                pI.forEach((item, idx) => {
+                    const k = `${pref}_plan_${idx}`;
+                    if (!hid.includes(k)) h += createInputRow(item.n, item.v, k, pref, false);
                 });
-                extraItems.forEach((item, idx) => {
-                    const key = `${prefix}_extra_${idx}`;
-                    html += createInputRow(item.n, 0, key, prefix, true, idx);
+                eI.forEach((item, idx) => {
+                    const k = `${pref}_extra_${idx}`;
+                    h += createInputRow(item.n, 0, k, pref, true, idx);
                 });
-                document.getElementById(containerId).innerHTML = html;
+                document.getElementById(cI).innerHTML = h;
             };
-            renderList(itemsQ1, extras.q1, 'rows-q1', 'q1');
-            renderList(itemsQ2, extras.q2, 'rows-q2', 'q2');
+            rL(itemsQ1, ex.q1, 'rows-q1', 'q1'); rL(itemsQ2, ex.q2, 'rows-q2', 'q2');
             calculateReal();
         }
 
-        function createInputRow(name, planVal, key, prefix, isExtra, extraIdx) {
-            const savedVal = realValues[key] || "";
-            const isPaid = paidItems[key]; 
-            return `<div class="r-row ios-card p-4 flex items-center justify-between mb-2" data-key="${key}" data-plan="${planVal}" data-name="${name}">
-                <div class="flex items-center gap-3">
-                    <button onclick="deleteRealRow('${key}', ${isExtra}, ${extraIdx}, '${prefix}')" class="text-red-400 active:scale-90"><i class="fas fa-trash-can text-xs"></i></button>
-                    <div><p class="text-sm font-bold text-slate-800">${name}</p><p class="text-[9px] text-slate-400 uppercase">${isExtra ? 'Extra' : 'Plan: ' + f(planVal)}</p></div>
-                </div>
-                <div class="text-right flex items-center gap-3">
-                    <button onclick="togglePaid('${key}')" class="focus:outline-none active:scale-90 transition-transform">
-                        <i class="fas ${isPaid ? 'fa-check-circle text-emerald-500' : 'fa-circle text-slate-200'} text-2xl"></i>
-                    </button>
-                    <div class="flex flex-col items-end">
-                        <input type="number" inputmode="decimal" value="${savedVal}" 
-                            class="val-input w-24 text-right font-black ${prefix=='q1'?'text-indigo-600':'text-emerald-600'} border-b border-slate-100 outline-none bg-transparent" 
-                            oninput="saveRealValue('${key}', this.value)" placeholder="0.00">
-                        <p class="dif-lbl text-[9px] font-black text-slate-300 mt-1">Q0.00</p>
-                    </div>
-                </div>
-            </div>`;
+        function createInputRow(n, pV, k, pref, isE, eI) {
+            const sV = realValues[k] || ""; const isP = paidItems[k]; 
+            return `<div class="r-row ios-card p-4 flex items-center justify-between mb-2" data-key="${k}" data-plan="${pV}" data-name="${n}">
+                <div class="flex items-center gap-3"><button onclick="deleteRealRow('${k}', ${isE}, ${eI}, '${pref}')" class="text-red-400"><i class="fas fa-trash-can text-xs"></i></button>
+                <div><p class="text-sm font-bold text-slate-800">${n}</p><p class="text-[9px] text-slate-400 uppercase">${isE ? 'Extra' : 'Fijo: ' + f(pV)}</p></div></div>
+                <div class="text-right flex items-center gap-3"><button onclick="togglePaid('${k}')"><i class="fas ${isP ? 'fa-check-circle text-emerald-500' : 'fa-circle text-slate-200'} text-2xl"></i></button>
+                <div class="flex flex-col items-end"><input type="number" inputmode="decimal" value="${sV}" class="val-input w-24 text-right font-black ${pref=='q1'?'text-indigo-600':'text-emerald-600'} outline-none bg-transparent" oninput="saveRealValue('${k}', this.value)" placeholder="0.00">
+                <p class="dif-lbl text-[9px] font-black text-slate-300 mt-1">Q0.00</p></div></div></div>`;
         }
 
-        function togglePaid(key) { paidItems[key] = !paidItems[key]; renderRealRows(); saveCurrentMonth(); }
+        function togglePaid(k) { paidItems[k] = !paidItems[k]; renderRealRows(); saveCurrentMonth(); }
 
-        function deleteRealRow(key, isExtra, idx, prefix) {
+        function deleteRealRow(k, isE, idx, pref) {
             const m = document.getElementById('global-month').value;
-            if (isExtra) {
-                let extras = JSON.parse(localStorage.getItem(`extras_${m}`)) || { q1: [], q2: [] };
-                extras[prefix].splice(idx, 1);
-                localStorage.setItem(`extras_${m}`, JSON.stringify(extras));
-            } else {
-                if(!hiddenRealItems[m]) hiddenRealItems[m] = [];
-                hiddenRealItems[m].push(key);
-            }
-            delete realValues[key]; delete paidItems[key]; renderRealRows(); saveCurrentMonth();
+            if (isE) {
+                let ex = JSON.parse(localStorage.getItem(`extras_${m}`)) || { q1: [], q2: [] };
+                ex[pref].splice(idx, 1); localStorage.setItem(`extras_${m}`, JSON.stringify(ex));
+            } else { if(!hiddenRealItems[m]) hiddenRealItems[m] = []; hiddenRealItems[m].push(k); }
+            delete realValues[k]; delete paidItems[k]; renderRealRows(); saveCurrentMonth();
         }
 
-        function saveRealValue(key, val) { realValues[key] = val; calculateReal(); saveCurrentMonth(); }
-
-        function addExtraReal(prefix) {
-            const n = prompt("Nombre:"); if(!n) return;
-            const m = document.getElementById('global-month').value;
-            let ex = JSON.parse(localStorage.getItem(`extras_${m}`)) || { q1: [], q2: [] };
-            ex[prefix].push({ n: n });
-            localStorage.setItem(`extras_${m}`, JSON.stringify(ex));
-            renderRealRows();
-        }
+        function saveRealValue(k, v) { realValues[k] = v; calculateReal(); saveCurrentMonth(); }
 
         function calculateReal() {
             const rI1 = parseFloat(document.getElementById('inc-q1').value) || 0; 
             const rI2 = parseFloat(document.getElementById('inc-q2').value) || 0;
-            let pg1 = 0, pg2 = 0, pp1 = 0, pp2 = 0, comp = true;
-            let allEx = [];
-
+            let pg1 = 0, pg2 = 0, pp1 = 0, pp2 = 0; let allEx = [];
             document.querySelectorAll('.r-row').forEach(row => {
-                const planVal = parseFloat(row.dataset.plan) || 0;
-                const inp = row.querySelector('.val-input');
-                const diffL = row.querySelector('.dif-lbl');
-                const key = row.dataset.key;
-                const isQ1 = key.startsWith('q1');
-                const isPaid = paidItems[key]; 
-
+                const pV = parseFloat(row.dataset.plan) || 0; const inp = row.querySelector('.val-input');
+                const difL = row.querySelector('.dif-lbl'); const k = row.dataset.key;
+                const isQ1 = k.startsWith('q1'); const isP = paidItems[k]; 
                 if (inp.value !== "") {
-                    const val = parseFloat(inp.value);
-                    if (isQ1) pg1 += val; else pg2 += val; 
-                    allEx.push({ n: row.dataset.name, v: val });
-                    if (planVal > 0) {
-                        const d = planVal - val;
-                        if (!isPaid && d > 0) {
-                            if (isQ1) pp1 += d; else pp2 += d;
-                            diffL.innerText = "Faltan " + f(d);
-                            diffL.className = "dif-lbl text-[9px] font-black mt-1 text-slate-400";
-                            comp = false; 
-                        } else {
-                            diffL.innerText = (d < 0 ? '-' : '+') + f(Math.abs(d));
-                            diffL.className = `dif-lbl text-[9px] font-black mt-1 ${d < 0 ? 'text-red-500' : 'text-emerald-500'}`;
-                        }
-                    } else { diffL.innerText = "Extra"; diffL.className = "dif-lbl text-[9px] font-black mt-1 text-orange-400"; }
-                } else {
-                    comp = false; if (isQ1) pp1 += planVal; else pp2 += planVal;
-                    diffL.innerText = "Pendiente"; diffL.className = "dif-lbl text-slate-300 text-[9px] font-bold mt-1";
-                }
+                    const v = parseFloat(inp.value); if (isQ1) pg1 += v; else pg2 += v; allEx.push({ n: row.dataset.name, v: v });
+                    if (pV > 0) {
+                        const d = pV - v; if (!isP && d > 0) { if (isQ1) pp1 += d; else pp2 += d; difL.innerText = "Faltan " + f(d); difL.className = "dif-lbl text-[9px] font-black mt-1 text-slate-400"; }
+                        else { difL.innerText = (d < 0 ? '-' : '+') + f(Math.abs(d)); difL.className = `dif-lbl text-[9px] font-black mt-1 ${d < 0 ? 'text-red-500' : 'text-emerald-500'}`; }
+                    } else { difL.innerText = "Extra"; difL.className = "dif-lbl text-[9px] font-black mt-1 text-orange-400"; }
+                } else { if (isQ1) pp1 += pV; else pp2 += pV; difL.innerText = "Pendiente"; difL.className = "dif-lbl text-slate-300 text-[9px] font-bold mt-1"; }
             });
-
-            const w1 = rI1 - pg1; const w2 = rI2 - pg2;
-            document.getElementById('wallet-q1').innerText = f(w1);
-            document.getElementById('pending-q1').innerText = f(pp1);
-            document.getElementById('rest-q1').innerText = f(w1 - pp1);
-            document.getElementById('wallet-q2').innerText = f(w2);
-            document.getElementById('pending-q2').innerText = f(pp2);
-            document.getElementById('rest-q2').innerText = f(w2 - pp2);
-
-            const final = (w1 - pp1) + (w2 - pp2);
-            document.getElementById('save-final-tab').innerText = f(final);
-            document.getElementById('status-txt').innerText = comp ? "Todo al día" : "Pendientes por completar";
-
-            const totalIn = rI1 + rI2; const totalOut = pg1 + pg2;
-            document.getElementById('dash-total-budget').innerText = f(totalIn);
-            document.getElementById('dash-spent').innerText = f(totalOut);
-            document.getElementById('dash-avail').innerText = f(totalIn - totalOut);
-            const pct = totalIn > 0 ? Math.min((totalOut / totalIn) * 100, 100) : 0;
-            document.getElementById('dash-percent').innerText = Math.round(pct);
-            document.getElementById('dash-circle').style.strokeDasharray = `${pct}, 100`;
+            const w1 = rI1 - pg1, w2 = rI2 - pg2;
+            document.getElementById('wallet-q1').innerText = f(w1); document.getElementById('pending-q1').innerText = f(pp1); document.getElementById('rest-q1').innerText = f(w1 - pp1);
+            document.getElementById('wallet-q2').innerText = f(w2); document.getElementById('pending-q2').innerText = f(pp2); document.getElementById('rest-q2').innerText = f(w2 - pp2);
+            const fin = (w1 - pp1) + (w2 - pp2); document.getElementById('save-final-tab').innerText = f(fin);
+            const tIn = rI1 + rI2, tOut = pg1 + pg2;
+            document.getElementById('dash-total-budget').innerText = f(tIn); document.getElementById('dash-spent').innerText = f(tOut); document.getElementById('dash-avail').innerText = f(tIn - tOut);
+            const pct = tIn > 0 ? Math.min((tOut / tIn) * 100, 100) : 0;
+            document.getElementById('dash-percent').innerText = Math.round(pct); document.getElementById('dash-circle').style.strokeDasharray = `${pct}, 100`;
             allEx.sort((a,b) => b.v - a.v);
             document.getElementById('dash-top-expenses').innerHTML = allEx.slice(0, 5).map(i => `<div class="flex justify-between text-xs border-b border-slate-100 pb-2"><span class="font-bold text-slate-600">${i.n}</span><span class="font-black text-slate-800">${f(i.v)}</span></div>`).join('');
-            return { inc: totalIn, exp: totalOut, save: final };
+            return { inc: tIn, exp: tOut, save: fin };
         }
 
-        function deletePlanItem(container, index) {
-            if(container === 'list-plan-q1') itemsQ1.splice(index, 1); else itemsQ2.splice(index, 1);
+        // CORRECCIÓN AQUÍ: Ahora refresca el Real al cambiar valores en el Plan
+        function updatePlanValue(c, i, v) {
+            const n = parseFloat(v) || 0; if(c === 'list-plan-q1') itemsQ1[i].v = n; else itemsQ2[i].v = n;
             localStorage.setItem('conf_q1', JSON.stringify(itemsQ1)); localStorage.setItem('conf_q2', JSON.stringify(itemsQ2));
-            renderRows();
+            renderRealRows(); // Refresca la vista Real con el nuevo monto del plan
         }
 
-        function updatePlanValue(container, i, val) {
-            const num = parseFloat(val) || 0;
-            if(container === 'list-plan-q1') itemsQ1[i].v = num; else itemsQ2[i].v = num;
-            localStorage.setItem('conf_q1', JSON.stringify(itemsQ1)); localStorage.setItem('conf_q2', JSON.stringify(itemsQ2));
-        }
-
-        function addExtraPlan(container) {
+        function addExtraPlan(c) {
             const n = prompt("Nombre:"); if(!n) return;
             const v = parseFloat(prompt("Monto:")) || 0;
-            if(container === 'list-plan-q1') itemsQ1.push({n, v}); else itemsQ2.push({n, v});
+            if(c === 'list-plan-q1') itemsQ1.push({n, v}); else itemsQ2.push({n, v});
             localStorage.setItem('conf_q1', JSON.stringify(itemsQ1)); localStorage.setItem('conf_q2', JSON.stringify(itemsQ2));
             renderRows();
+        }
+
+        function deletePlanItem(c, i) {
+            if(c === 'list-plan-q1') itemsQ1.splice(i, 1); else itemsQ2.splice(i, 1);
+            localStorage.setItem('conf_q1', JSON.stringify(itemsQ1)); localStorage.setItem('conf_q2', JSON.stringify(itemsQ2));
+            renderRows();
+        }
+
+        function addExtraReal(p) {
+            const n = prompt("Nombre:"); if(!n) return;
+            const m = document.getElementById('global-month').value;
+            let ex = JSON.parse(localStorage.getItem(`extras_${m}`)) || { q1: [], q2: [] };
+            ex[p].push({ n: n }); localStorage.setItem(`extras_${m}`, JSON.stringify(ex));
+            renderRealRows();
         }
 
         function changeMonth() {
             const m = document.getElementById('global-month').value;
-            const dataStr = localStorage.getItem('f_v_local_' + m);
+            const dS = localStorage.getItem('f_v_local_' + m);
             realValues = {}; paidItems = {};
             const freq = localStorage.getItem('f_pref_freq') || 'mensual';
             document.getElementById('pay-frequency').value = freq;
-            changeFrequency(); // Aplica visuales
-
-            if(dataStr) {
-                const s = JSON.parse(dataStr);
-                document.getElementById('p-inc-q1').value = s.pI1 || 0;
-                document.getElementById('p-inc-q2').value = s.pI2 || 0;
-                document.getElementById('inc-q1').value = s.inc1 || 0;
-                document.getElementById('inc-q2').value = s.inc2 || 0;
+            changeFrequency();
+            if(dS) {
+                const s = JSON.parse(dS);
+                document.getElementById('p-inc-q1').value = s.pI1 || 0; document.getElementById('p-inc-q2').value = s.pI2 || 0;
+                document.getElementById('inc-q1').value = s.inc1 || 0; document.getElementById('inc-q2').value = s.inc2 || 0;
                 realValues = s.v_map || {}; paidItems = s.paid || {};
             } else {
                 document.getElementById('p-inc-q1').value = 0; document.getElementById('p-inc-q2').value = 0;
@@ -365,20 +302,20 @@
             setTimeout(() => { btn.innerText = "Guardar"; btn.classList.replace("bg-green-500", "bg-[#007AFF]"); }, 1000);
         }
 
-        function openTab(evt, name) {
+        function openTab(evt, n) {
             document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
             document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active-tab-btn"));
-            document.getElementById(name).classList.add("active"); evt.currentTarget.classList.add("active-tab-btn");
-            if(name === 'historial') updateHistory();
+            document.getElementById(n).classList.add("active"); evt.currentTarget.classList.add("active-tab-btn");
+            if(n === 'historial') updateHistory();
         }
 
         function updateHistory() {
-            const container = document.getElementById('history-rows'); container.innerHTML = ""; let tS=0;
+            const c = document.getElementById('history-rows'); c.innerHTML = ""; let tS=0;
             ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"].forEach(m => {
-                const data = localStorage.getItem('f_v_local_' + m);
-                if(data) {
-                    const s = JSON.parse(data); tS += (s.summary ? s.summary.save : 0);
-                    container.innerHTML += `<div class="ios-card p-4 flex justify-between"><b>${m}</b> <span class="text-emerald-600 font-bold">${f(s.summary ? s.summary.save : 0)}</span></div>`;
+                const d = localStorage.getItem('f_v_local_' + m);
+                if(d) {
+                    const s = JSON.parse(d); tS += (s.summary ? s.summary.save : 0);
+                    c.innerHTML += `<div class="ios-card p-4 flex justify-between"><b>${m}</b> <span class="text-emerald-600 font-bold">${f(s.summary ? s.summary.save : 0)}</span></div>`;
                 }
             });
             document.getElementById('history-foot').innerHTML = `<div class="bg-slate-900 rounded-3xl p-6 text-white text-center"><p class="text-xs opacity-50 uppercase">Ahorro Anual</p><p class="text-3xl font-black text-emerald-400">${f(tS)}</p></div>`;
