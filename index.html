@@ -3,28 +3,25 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <title>Mi Billetera Pro</title>
+    <title>Billetera Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; -webkit-tap-highlight-color: transparent; padding-bottom: 120px; background-color: #F2F2F7; }
+        body { font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif; -webkit-tap-highlight-color: transparent; padding-bottom: 100px; background-color: #F2F2F7; }
         .ios-card { background: white; border-radius: 20px; box-shadow: 0 2px 10px rgba(0,0,0,0.04); }
         .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        .tab-content.active { display: block; }
         .active-tab-btn { color: #007AFF !important; }
-        .circle-chart { width: 70px; height: 70px; transform: rotate(-90deg); }
-        .circle-bg { fill: none; stroke: #E5E7EB; stroke-width: 3; }
-        .circle { fill: none; stroke-width: 3; stroke-linecap: round; transition: stroke-dasharray 0.5s; }
-        .mode-pill { transition: all 0.3s; cursor: pointer; }
-        .mode-pill.active { background: #007AFF; color: white; border-color: #007AFF; }
+        .paid { opacity: 0.5; grayscale: 100%; border-left: 5px solid #34C759 !important; }
+        .mode-pill { transition: all 0.2s; }
+        .mode-pill.active { background: #007AFF; color: white; }
     </style>
 </head>
 <body>
 
     <header class="bg-white/90 backdrop-blur-md sticky top-0 z-50 border-b border-slate-100 p-4">
         <div class="max-w-lg mx-auto flex justify-between items-center">
-            <select id="global-month" onchange="loadMonthData()" class="text-2xl font-black bg-transparent outline-none text-slate-800">
+            <select id="global-month" onchange="loadMonthData()" class="text-2xl font-black bg-transparent outline-none text-slate-800 appearance-none">
                 <option>Enero</option><option>Febrero</option><option>Marzo</option><option>Abril</option>
                 <option>Mayo</option><option>Junio</option><option>Julio</option><option>Agosto</option>
                 <option>Septiembre</option><option>Octubre</option><option>Noviembre</option><option>Diciembre</option>
@@ -35,242 +32,196 @@
 
     <main class="p-5 max-w-lg mx-auto">
         <div id="dashboard" class="tab-content active space-y-4">
-            <div class="ios-card p-6 bg-slate-900 text-white space-y-4">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider">Ahorro Disponible</p>
-                        <p id="dash-avail" class="text-4xl font-black text-emerald-400">Q0.00</p>
-                    </div>
-                    <div class="relative flex items-center justify-center">
-                        <svg class="circle-chart" viewBox="0 0 36 36">
-                            <path class="circle-bg" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831"/>
-                            <path id="dash-circle" class="circle" stroke="#007AFF" stroke-dasharray="0, 100" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" />
-                        </svg>
-                        <div class="absolute text-[10px] font-bold text-white"><span id="dash-percent">0</span>%</div>
-                    </div>
-                </div>
-                <div class="pt-2 border-t border-slate-700 flex justify-between">
-                    <div><p class="text-[8px] text-slate-500 uppercase">Ingresos</p><p id="dash-total-in" class="text-sm font-bold">Q0.00</p></div>
-                    <div><p class="text-[8px] text-slate-500 uppercase">Gastado</p><p id="dash-total-out" class="text-sm font-bold text-red-400">Q0.00</p></div>
-                </div>
-            </div>
-            
-            <div id="q-status-container" class="grid grid-cols-2 gap-3 hidden">
-                <div class="ios-card p-4 border-l-4 border-indigo-500">
-                    <p class="text-[9px] font-bold text-slate-400 uppercase">Sobra Q1</p>
-                    <p id="q1-balance" class="text-lg font-black text-slate-700">Q0.00</p>
-                </div>
-                <div class="ios-card p-4 border-l-4 border-emerald-500">
-                    <p class="text-[9px] font-bold text-slate-400 uppercase">Sobra Q2</p>
-                    <p id="q2-balance" class="text-lg font-black text-slate-700">Q0.00</p>
+            <div class="ios-card p-6 bg-slate-900 text-white">
+                <p class="text-[10px] text-slate-400 font-bold uppercase tracking-wider mb-1">Ahorro Disponible</p>
+                <p id="dash-avail" class="text-4xl font-black text-emerald-400">Q0.00</p>
+                <div class="mt-4 pt-4 border-t border-slate-800 flex justify-between items-center">
+                    <div><p class="text-[8px] text-slate-500 uppercase">Ingresos</p><p id="dash-in" class="text-sm font-bold">Q0.00</p></div>
+                    <div class="text-right"><p class="text-[8px] text-slate-500 uppercase">Gastos</p><p id="dash-out" class="text-sm font-bold text-red-400">Q0.00</p></div>
                 </div>
             </div>
 
+            <div id="q-status-container" class="grid grid-cols-2 gap-3 hidden">
+                <div class="ios-card p-4 border-l-4 border-indigo-500"><p class="text-[9px] font-bold text-slate-400">SOBRA Q1</p><p id="q1-bal" class="text-lg font-black text-slate-700">Q0.00</p></div>
+                <div class="ios-card p-4 border-l-4 border-emerald-500"><p class="text-[9px] font-bold text-slate-400">SOBRA Q2</p><p id="q2-bal" class="text-lg font-black text-slate-700">Q0.00</p></div>
+            </div>
+
             <div class="ios-card p-5">
-                <h3 class="text-xs font-black text-slate-400 uppercase mb-4 tracking-tighter">Resumen de Gastos</h3>
-                <div id="dash-top-expenses" class="space-y-3 text-xs"></div>
+                <h3 class="text-xs font-black text-slate-400 uppercase mb-4 tracking-tighter">Historial de Gastos</h3>
+                <div id="dash-list" class="space-y-3 text-xs"></div>
             </div>
         </div>
 
         <div id="esperado" class="tab-content space-y-4">
-            <div class="flex items-center justify-between px-2">
-                <h2 class="font-black text-slate-800">Plan Mensual</h2>
+            <div class="flex items-center justify-between px-1">
+                <h2 class="font-black text-slate-800">Presupuesto</h2>
                 <div class="flex bg-slate-200 p-1 rounded-xl">
-                    <button id="btn-m-mensual" onclick="setMode('mensual')" class="mode-pill px-3 py-1 text-[10px] font-bold rounded-lg active">MES</button>
-                    <button id="btn-m-quincenal" onclick="setMode('quincenal')" class="mode-pill px-3 py-1 text-[10px] font-bold rounded-lg">Q1/Q2</button>
+                    <button id="btn-m-mes" onclick="setMode('mensual')" class="mode-pill px-4 py-1 text-[10px] font-bold rounded-lg active">MES</button>
+                    <button id="btn-m-qui" onclick="setMode('quincenal')" class="mode-pill px-4 py-1 text-[10px] font-bold rounded-lg">Q1/Q2</button>
                 </div>
             </div>
-            <div id="plan-container" class="space-y-4"></div>
+            <div id="plan-container" class="space-y-6"></div>
         </div>
 
         <div id="real" class="tab-content space-y-4">
             <div id="real-container" class="space-y-6"></div>
         </div>
 
-        <div id="ahorro" class="tab-content space-y-5">
-            <h2 class="font-black text-slate-800 text-xl px-1">Metas de Ahorro</h2>
-            <div class="ios-card p-6 bg-emerald-500 text-white shadow-lg">
-                <p class="text-[10px] font-bold uppercase opacity-80">Ahorro Potencial este mes</p>
-                <p id="ahorro-total-final" class="text-4xl font-black">Q0.00</p>
-                <p class="text-[10px] mt-4 font-medium italic opacity-90">"El ahorro es la libertad de mañana."</p>
+        <div id="ahorro" class="tab-content space-y-4 pt-4">
+            <div class="ios-card p-8 bg-emerald-500 text-white text-center shadow-xl">
+                <i class="fas fa-piggy-bank text-4xl mb-4"></i>
+                <h2 class="text-xl font-black">Ahorro Final del Mes</h2>
+                <p id="save-total" class="text-4xl font-black mt-2">Q0.00</p>
             </div>
-
-            <div class="pt-10 space-y-4">
-                <p class="text-center text-[10px] font-bold text-slate-400 uppercase">Administración</p>
-                <button onclick="clearEverything()" class="w-full py-4 text-red-400 font-bold text-xs uppercase bg-white rounded-2xl border border-red-50">Borrar todos los datos del celular</button>
-            </div>
+            <button onclick="if(confirm('¿Borrar todo?')) {localStorage.clear(); location.reload();}" class="w-full py-4 text-red-400 font-bold text-[10px] uppercase opacity-50">Restablecer aplicación</button>
         </div>
     </main>
 
-    <nav class="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-slate-100 flex justify-around p-3 pb-8 z-50">
+    <nav class="fixed bottom-0 left-0 right-0 bg-white border-t border-slate-100 flex justify-around p-3 pb-6 z-50">
         <button onclick="openTab(event, 'dashboard')" class="tab-btn active-tab-btn flex flex-col items-center gap-1 flex-1 text-slate-300"><i class="fas fa-home text-xl"></i><span class="text-[9px] font-bold">INICIO</span></button>
-        <button onclick="openTab(event, 'esperado')" class="tab-btn flex flex-col items-center gap-1 flex-1 text-slate-300"><i class="fas fa-tasks text-xl"></i><span class="text-[9px] font-bold">PLAN</span></button>
-        <button onclick="openTab(event, 'real')" class="tab-btn flex flex-col items-center gap-1 flex-1 text-slate-300"><i class="fas fa-receipt text-xl"></i><span class="text-[9px] font-bold">GASTOS</span></button>
+        <button onclick="openTab(event, 'esperado')" class="tab-btn flex flex-col items-center gap-1 flex-1 text-slate-300"><i class="fas fa-list text-xl"></i><span class="text-[9px] font-bold">PLAN</span></button>
+        <button onclick="openTab(event, 'real')" class="tab-btn flex flex-col items-center gap-1 flex-1 text-slate-300"><i class="fas fa-wallet text-xl"></i><span class="text-[9px] font-bold">GASTO</span></button>
         <button onclick="openTab(event, 'ahorro')" class="tab-btn flex flex-col items-center gap-1 flex-1 text-slate-300"><i class="fas fa-piggy-bank text-xl"></i><span class="text-[9px] font-bold">AHORRO</span></button>
     </nav>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('wallet_final_v4')) || {};
+        let db = JSON.parse(localStorage.getItem('wallet_v7')) || {};
 
         function f(n) { return 'Q' + (parseFloat(n) || 0).toLocaleString('en-US', {minimumFractionDigits:2}); }
         function getM() { return document.getElementById('global-month').value; }
 
         function loadMonthData() {
             const m = getM();
-            if (!db[m]) db[m] = { mode: 'mensual', income1: 0, income2: 0, plan1: [], plan2: [], real: {} };
-            updateModeUI();
-            renderPlan();
-            renderReal();
-            calculate();
+            if (!db[m]) db[m] = { mode: 'mensual', income1:0, income2:0, plan1:[], plan2:[], real:{}, paid:{} };
+            updateUI();
         }
 
-        function setMode(mode) {
-            db[getM()].mode = mode;
-            updateModeUI();
-            renderPlan();
-            renderReal();
-            calculate();
-        }
+        function setMode(mode) { db[getM()].mode = mode; updateUI(); }
 
-        function updateModeUI() {
-            const mode = db[getM()].mode;
-            document.getElementById('btn-m-mensual').className = `mode-pill px-4 py-1 text-[10px] font-bold rounded-lg ${mode === 'mensual' ? 'active' : 'bg-transparent text-slate-500'}`;
-            document.getElementById('btn-m-quincenal').className = `mode-pill px-4 py-1 text-[10px] font-bold rounded-lg ${mode === 'quincenal' ? 'active' : 'bg-transparent text-slate-500'}`;
+        function updateUI() {
+            const m = getM();
+            const mode = db[m].mode;
+            document.getElementById('btn-m-mes').className = `mode-pill px-4 py-1 text-[10px] font-bold rounded-lg ${mode==='mensual'?'active':'bg-transparent text-slate-500'}`;
+            document.getElementById('btn-m-qui').className = `mode-pill px-4 py-1 text-[10px] font-bold rounded-lg ${mode==='quincenal'?'active':'bg-transparent text-slate-500'}`;
             document.getElementById('q-status-container').classList.toggle('hidden', mode === 'mensual');
+            renderPlan();
+            renderReal();
+            calculate();
         }
 
         function renderPlan() {
             const m = getM();
             const mode = db[m].mode;
-            let html = "";
-
-            const drawSection = (title, list, id) => `
+            const draw = (list, id, title) => `
                 <div class="space-y-2">
                     <p class="text-[10px] font-black text-slate-400 uppercase px-1">${title}</p>
                     ${list.map((item, i) => `
                         <div class="ios-card p-4 flex justify-between items-center">
-                            <span class="font-bold text-slate-700 text-xs">${item.name}</span>
+                            <span class="font-bold text-slate-700 text-sm">${item.name}</span>
                             <div class="flex items-center gap-2">
-                                <input type="number" value="${item.val}" oninput="db['${m}']['${id}'][${i}].val=this.value; calculate();" class="w-16 text-right font-black bg-slate-50 p-1 rounded text-sm">
-                                <button onclick="removePlan('${id}', ${i})" class="text-red-200"><i class="fas fa-times-circle"></i></button>
+                                <input type="number" value="${item.val}" oninput="db['${m}']['${id}'][${i}].val=this.value; calculate();" class="w-20 text-right font-black bg-slate-50 p-1 rounded-lg text-sm">
+                                <button onclick="db['${m}']['${id}'].splice(${i},1); updateUI();" class="text-red-200"><i class="fas fa-times-circle"></i></button>
                             </div>
                         </div>`).join('')}
-                    <button onclick="addPlanItem('${id}')" class="w-full py-3 border-2 border-dashed border-slate-200 rounded-xl text-slate-400 font-bold text-[10px]">+ AGREGAR</button>
+                    <button onclick="const n=prompt('Nombre:'); if(n) {db['${m}']['${id}'].push({name:n, val:0}); updateUI();}" class="w-full py-3 border-2 border-dashed border-slate-200 rounded-2xl text-slate-400 font-bold text-[10px]">+ AÑADIR</button>
                 </div>`;
-
-            if (mode === 'mensual') { html = drawSection("Presupuesto del Mes", db[m].plan1, 'plan1'); }
-            else { html = drawSection("Presupuesto Q1", db[m].plan1, 'plan1') + drawSection("Presupuesto Q2", db[m].plan2, 'plan2'); }
-            document.getElementById('plan-container').innerHTML = html;
+            document.getElementById('plan-container').innerHTML = (mode==='mensual') ? draw(db[m].plan1, 'plan1', 'Gastos Planeados') : draw(db[m].plan1, 'plan1', 'Quincena 1') + draw(db[m].plan2, 'plan2', 'Quincena 2');
         }
 
         function renderReal() {
             const m = getM();
             const mode = db[m].mode;
-            
-            const drawRealSection = (title, incKey, planList, prefix) => `
+            const drawReal = (title, incKey, planList, prefix) => `
                 <div class="space-y-3">
-                    <div class="ios-card p-4 ${prefix==='p1'?'bg-indigo-600':'bg-emerald-600'} text-white shadow-md">
+                    <div class="ios-card p-5 ${prefix==='p1'?'bg-indigo-600':'bg-emerald-600'} text-white shadow-lg">
                         <p class="text-[9px] font-bold uppercase opacity-80">${title}</p>
-                        <div class="flex items-center text-xl font-black">
-                            <span>Q</span><input type="number" value="${db[m][incKey]}" oninput="db['${m}']['${incKey}']=this.value; calculate();" class="bg-transparent outline-none w-full ml-1">
-                        </div>
+                        <div class="flex items-center text-2xl font-black">Q<input type="number" value="${db[m][incKey]}" oninput="db['${m}']['${incKey}']=this.value; calculate();" class="bg-transparent outline-none w-full ml-1"></div>
                     </div>
-                    ${planList.map(p => `
-                        <div class="ios-card p-4 flex justify-between items-center border-l-4 ${prefix==='p1'?'border-indigo-400':'border-emerald-400'}">
-                            <div><p class="font-bold text-slate-700 text-xs">${p.name}</p><p class="text-[8px] text-slate-400 uppercase font-bold">Plan: ${f(p.val)}</p></div>
-                            <input type="number" value="${db[m].real[p.name] || ''}" placeholder="0" oninput="db['${m}'].real['${p.name}']=this.value; calculate();" class="w-20 text-right font-black text-slate-800 outline-none">
-                        </div>`).join('')}
+                    ${planList.map(p => {
+                        const realV = db[m].real[p.name] || 0;
+                        const diff = p.val - realV;
+                        const isPaid = db[m].paid[p.name];
+                        return `
+                        <div class="ios-card p-4 border-l-[6px] ${prefix==='p1'?'border-indigo-400':'border-emerald-400'} ${isPaid?'paid':''}">
+                            <div class="flex justify-between items-start mb-2">
+                                <div><p class="font-bold text-slate-800 text-sm">${p.name}</p><p class="text-[9px] text-slate-400 font-bold">PLAN: ${f(p.val)}</p></div>
+                                <button onclick="db['${m}'].paid['${p.name}']=!db['${m}'].paid['${p.name}']; renderReal(); calculate();" class="text-2xl ${isPaid?'text-emerald-500':'text-slate-200'}"><i class="fas fa-check-circle"></i></button>
+                            </div>
+                            <div class="flex justify-between items-center">
+                                <span class="text-[10px] font-black ${diff<0?'text-red-500':'text-emerald-500'}">${diff<0?'FALTA:':'SOBRA:'} ${f(Math.abs(diff))}</span>
+                                <div class="bg-slate-50 px-2 py-1 rounded-lg">
+                                    <span class="text-xs text-slate-400 font-bold">Q</span>
+                                    <input type="number" value="${db[m].real[p.name]||''}" placeholder="Real" oninput="db['${m}'].real['${p.name}']=this.value; calculate();" class="w-16 text-right font-black bg-transparent outline-none text-sm">
+                                </div>
+                            </div>
+                        </div>`;
+                    }).join('')}
                 </div>`;
 
-            let html = "";
-            if (mode === 'mensual') { html = drawRealSection("Salario Mensual", "income1", db[m].plan1, 'p1'); }
-            else { html = drawRealSection("Salario Q1", "income1", db[m].plan1, 'p1') + drawRealSection("Salario Q2", "income2", db[m].plan2, 'p2'); }
+            let h = (mode==='mensual') ? drawReal("Sueldo Mensual", "income1", db[m].plan1, 'p1') : drawReal("Sueldo Q1", "income1", db[m].plan1, 'p1') + drawReal("Sueldo Q2", "income2", db[m].plan2, 'p2');
             
-            // Sección de extras
-            html += `<div class="space-y-2 pt-4">
-                <p class="text-[10px] font-black text-slate-400 uppercase px-1">Otros Gastos / Extras</p>
-                <div id="extra-list"></div>
-                <button onclick="addExtraReal()" class="w-full py-4 bg-white border border-slate-200 rounded-xl text-slate-500 font-bold text-[10px] uppercase shadow-sm">+ AGREGAR GASTO EXTRA</button>
+            h += `<div class="pt-4 space-y-3">
+                <p class="text-[10px] font-black text-slate-400 uppercase">Gastos Extras</p>
+                <div id="extras-list"></div>
+                <button onclick="const n=prompt('Extra:'); if(n) {db['${m}'].real[n]=0; renderReal();}" class="w-full py-4 bg-white border border-slate-200 rounded-2xl text-slate-400 font-bold text-[10px]">+ EXTRA</button>
             </div>`;
-
-            document.getElementById('real-container').innerHTML = html;
+            document.getElementById('real-container').innerHTML = h;
             renderExtraRows();
         }
 
         function renderExtraRows() {
             const m = getM();
-            let extrasHtml = "";
+            let h = "";
             Object.keys(db[m].real).forEach(k => {
                 if (!db[m].plan1.find(p=>p.name===k) && !db[m].plan2.find(p=>p.name===k)) {
-                    extrasHtml += `
-                    <div class="ios-card p-4 flex justify-between items-center mb-2">
-                        <span class="font-bold text-slate-700 text-xs">${k}</span>
-                        <div class="flex items-center gap-2">
-                            <input type="number" value="${db[m].real[k]}" oninput="db['${getM()}'].real['${k}']=this.value; calculate();" class="w-20 text-right font-black text-slate-800 outline-none">
-                            <button onclick="removeRealExtra('${k}')" class="text-red-200"><i class="fas fa-trash"></i></button>
+                    const isPaid = db[m].paid[k];
+                    h += `<div class="ios-card p-4 border-l-[6px] border-slate-300 ${isPaid?'paid':''}">
+                        <div class="flex justify-between items-center">
+                            <span class="font-bold text-slate-700 text-xs">${k}</span>
+                            <div class="flex items-center gap-3">
+                                <input type="number" value="${db[m].real[k]}" oninput="db['${m}'].real['${k}']=this.value; calculate();" class="w-20 text-right font-black outline-none bg-transparent">
+                                <button onclick="db['${m}'].paid['${k}']=!db['${m}'].paid['${k}']; renderReal(); calculate();" class="text-2xl ${isPaid?'text-emerald-500':'text-slate-200'}"><i class="fas fa-check-circle"></i></button>
+                                <button onclick="delete db['${m}'].real['${k}']; renderReal(); calculate();" class="text-red-100"><i class="fas fa-trash"></i></button>
+                            </div>
                         </div>
                     </div>`;
                 }
             });
-            document.getElementById('extra-list').innerHTML = extrasHtml;
+            document.getElementById('extras-list').innerHTML = h;
         }
 
         function calculate() {
             const m = getM();
-            let q1out = 0, q2out = 0, extras = 0;
-            
-            db[m].plan1.forEach(p => q1out += (parseFloat(db[m].real[p.name]) || 0));
-            db[m].plan2.forEach(p => q2out += (parseFloat(db[m].real[p.name]) || 0));
-            Object.keys(db[m].real).forEach(k => {
-                if (!db[m].plan1.find(p=>p.name===k) && !db[m].plan2.find(p=>p.name===k)) {
-                    extras += (parseFloat(db[m].real[k]) || 0);
-                }
-            });
+            let out1=0, out2=0, ext=0;
+            db[m].plan1.forEach(p => out1 += (parseFloat(db[m].real[p.name])||0));
+            db[m].plan2.forEach(p => out2 += (parseFloat(db[m].real[p.name])||0));
+            Object.keys(db[m].real).forEach(k => { if(!db[m].plan1.find(p=>p.name===k) && !db[m].plan2.find(p=>p.name===k)) ext += (parseFloat(db[m].real[k])||0); });
 
-            const i1 = parseFloat(db[m].income1)||0;
-            const i2 = parseFloat(db[m].income2)||0;
-            const totalIn = i1 + i2;
-            const totalOut = q1out + q2out + extras;
-            const finalAhorro = totalIn - totalOut;
+            const i1=parseFloat(db[m].income1)||0, i2=parseFloat(db[m].income2)||0;
+            const totalOut = out1 + out2 + ext, totalIn = i1 + i2;
+            const final = totalIn - totalOut;
 
-            document.getElementById('dash-avail').innerText = f(finalAhorro);
-            document.getElementById('ahorro-total-final').innerText = f(finalAhorro);
-            document.getElementById('dash-total-in').innerText = f(totalIn);
-            document.getElementById('dash-total-out').innerText = f(totalOut);
-            
-            document.getElementById('q1-balance').innerText = f(i1 - q1out - extras);
-            document.getElementById('q2-balance').innerText = f(i2 - q2out);
-            
-            const pct = totalIn > 0 ? Math.min((totalOut / totalIn) * 100, 100) : 0;
-            document.getElementById('dash-percent').innerText = Math.round(pct);
-            document.getElementById('dash-circle').style.strokeDasharray = `${pct}, 100`;
+            document.getElementById('dash-avail').innerText = f(final);
+            document.getElementById('save-total').innerText = f(final);
+            document.getElementById('dash-in').innerText = f(totalIn);
+            document.getElementById('dash-out').innerText = f(totalOut);
+            document.getElementById('q1-bal').innerText = f(i1 - out1 - ext);
+            document.getElementById('q2-bal').innerText = f(i2 - out2);
 
             let all = [];
             Object.keys(db[m].real).forEach(k => { if(db[m].real[k]>0) all.push({n:k, v:db[m].real[k]}) });
             all.sort((a,b)=>b.v - a.v);
-            document.getElementById('dash-top-expenses').innerHTML = all.map(e => `
+            document.getElementById('dash-list').innerHTML = all.slice(0,5).map(e => `
                 <div class="flex justify-between py-1 border-b border-slate-50"><span>${e.n}</span><span class="font-bold">${f(e.v)}</span></div>
-            `).join('') || '<p class="text-center text-slate-300">No hay gastos registrados</p>';
+            `).join('') || '<p class="text-center text-slate-300">No hay gastos</p>';
         }
 
-        function addPlanItem(id) {
-            const n = prompt("Nombre del gasto:");
-            if(n) { db[getM()][id].push({name: n, val: 0}); renderPlan(); renderReal(); }
-        }
-        function addExtraReal() {
-            const n = prompt("Nombre del gasto extra:");
-            if(n) { db[getM()].real[n] = 0; renderReal(); }
-        }
-        function removePlan(id, i) { if(confirm("¿Borrar?")) { db[getM()][id].splice(i, 1); renderPlan(); renderReal(); } }
-        function removeRealExtra(k) { delete db[getM()].real[k]; renderReal(); calculate(); }
-        function saveCurrentMonth() { localStorage.setItem('wallet_final_v4', JSON.stringify(db)); alert("¡Guardado exitosamente!"); }
-        function clearEverything() { if(confirm("¿Borrar todo? No podrás recuperarlo.")) { localStorage.clear(); location.reload(); } }
-        
-        function openTab(evt, name) {
+        function saveCurrentMonth() { localStorage.setItem('wallet_v7', JSON.stringify(db)); alert("¡Guardado!"); }
+        function openTab(e, n) {
             document.querySelectorAll(".tab-content").forEach(t => t.classList.remove("active"));
             document.querySelectorAll(".tab-btn").forEach(b => b.classList.remove("active-tab-btn"));
-            document.getElementById(name).classList.add("active");
-            evt.currentTarget.classList.add("active-tab-btn");
+            document.getElementById(n).classList.add("active");
+            e.currentTarget.classList.add("active-tab-btn");
         }
 
         loadMonthData();
